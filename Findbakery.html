@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  <title>A Pen by  Codeguy</title>
+  
+  
+  
+  
+  
+</head>
+
+<body>
+
+  <head>
+<!-- Firebase App is always required and must be first -->
+<script src="https://www.gstatic.com/firebasejs/5.5.8/firebase-app.js"></script>
+
+<!-- Add additional services that you want to use -->
+<script src="https://www.gstatic.com/firebasejs/5.5.8/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.5.8/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.5.8/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.5.8/firebase-messaging.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.5.8/firebase-functions.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.5.8/firebase-storage.js"></script>
+  
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyCTWkkxDp1GOGavSHO9lJfaWUH1TdQH8Pw",
+    authDomain: "food4poor-2e93e.firebaseapp.com",
+    databaseURL: "https://food4poor-2e93e.firebaseio.com",
+    projectId: "food4poor-2e93e",
+    storageBucket: "food4poor-2e93e.appspot.com",
+    messagingSenderId: "775446433425"
+  };
+  firebase.initializeApp(config);
+  
+  const sleep = (milliseconds) => {
+  return new Promise(resolve => setTimeout(resolve, milliseconds))
+}
+</script>
+  
+</head>
+<p>Head northeast on Dover RD, Slight left to stay on Dover RD, Turn left to stay on dover Rd, Turn right onto Dover Ave, Turn right onto Commonwealth Ave W, Turn right onto Vista Exchange Green, Slight Left</p>
+
+
+<p id="coordinates"></p>
+
+<script>
+// Test for the existence of certain keys within a DataSnapshot
+  
+  
+var ref = firebase.database().ref("Backery");
+function showPosition(position) {
+userLat = position.coords.latitude;
+    userLon = position.coords.longitude;
+    console.log("IMPORTANT: " + userLat);
+    console.log("IMPORTANT: " + userLon);
+      x.innerHTML = "Latitude: " + position.coords.latitude +       "<br>Longitude: " + position.coords.longitude; 
+}
+  
+  var x = document.getElementById("coordinates");
+  userLat = userLon = 0;
+  if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+        x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+  
+ref.once("value").then(function(snapshot) {
+  console.log("OK");
+    // console.log(snapshot.child("jacky").child("Food").val()); 
+     snapshot.forEach(function(bakery) {
+       //  console.log(bakery.child("Latitude").val());
+       // console.log(bakery.child("Longitude").val());
+       // console.log(bakery.child("Food").val());
+      console.log("Bakery latitude is: " + bakery.child("Latitude").val());
+      console.log("Bakery longitude is: " + bakery.child("Longitude").val());
+      console.log("User latitude is: " + userLat);
+      console.log("User longitude is: " + userLon);
+       
+      distanceToBakery = Math.sqrt(Math.pow(userLat - bakery.child("Latitude").val(),2) + Math.pow(userLon - bakery.child("Longitude").val(),2));
+       console.log('distance to bakery: ' + distanceToBakery);
+      
+    });
+  });
+    
+
+</script>
+<!--    
+  var ref = firebase().database().ref()
+  
+  ref.child('Bakery').child('jacky').on('value', function(snapshot) {
+    console.log(snapshot.val())
+  })
+}
+</script>
+  
+  
+
+</body>
+
+</html>
